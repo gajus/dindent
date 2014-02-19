@@ -1,8 +1,8 @@
 {
-	"name": "gajus/Dindent",
+	"name": "gajus/dindent",
 	"description": "",
 	"keywords": ["HTML", "indent", "format"],
-	"homepage": "https://github.com/gajus/Dindent",
+	"homepage": "https://github.com/gajus/dindent",
 	"type": "library",
 	"license": "BSD-3-Clause",
 	"authors": [
