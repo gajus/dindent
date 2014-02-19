@@ -1,8 +1,8 @@
 {
-	"name": "gajus/marray",
-	"description": "More array functions.",
-	"keywords": ["array", "toolkit"],
-	"homepage": "https://github.com/gajus/marray",
+	"name": "gajus/pindent",
+	"description": "",
+	"keywords": ["HTML"],
+	"homepage": "https://github.com/gajus/pindent",
 	"type": "library",
 	"license": "BSD-3-Clause",
 	"authors": [
@@ -19,8 +19,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Gajus\\Marray\\": "src/"
-		},
-		"files": ["src/marray.php"]
+			"Gajus\\Pindent\\": "src/"
+		}
 	}
 }
