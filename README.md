@@ -6,6 +6,10 @@
 * Indentation for development and testing.
 * Do not use in production.
 
+Dedicated to developers who suffer from OCD and cannot bare reading template engine produced code.
+
+This code is not for validating document or sanitisation. Consider using [DOMDocument::$formatOutput](http://www.php.net/manual/en/class.domdocument.php), [HTML Purifier](http://htmlpurifier.org/) or [Tidy](http://www.php.net/manual/en/book.tidy.php).
+
 ## Use
 
 Parser implements a single method, `indent`:
@@ -40,7 +44,7 @@ In the above example, `[..]` is a placeholder for:
 
 Dindent will convert it to:
 
-```
+```HTML
 <!DOCTYPE html>
 <html>
     <head></head>
