@@ -14,6 +14,8 @@ If you are looking for documentation validation or sanitisation, consider:
 * [HTML Purifier](http://htmlpurifier.org/)
 * [Tidy](http://www.php.net/manual/en/book.tidy.php)
 
+You can test Dindent in a [sandbox](http://gajus.com/dindent/sandbox/) pastebin.
+
 ## Use
 
 Parser implements a single method, `indent`:
