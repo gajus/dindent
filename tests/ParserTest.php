@@ -4,7 +4,7 @@ class ParserTest extends PHPUnit_Framework_TestCase {
         $parser;
 
     public function setUp () {
-        $this->parser = new \Gajus\Pindent\Parser();
+        $this->parser = new \Gajus\Dindent\Parser();
     }
 
     /**
