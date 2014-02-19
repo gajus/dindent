@@ -1,8 +1,8 @@
 {
-	"name": "gajus/pindent",
+	"name": "gajus/Dindent",
 	"description": "",
-	"keywords": ["HTML"],
-	"homepage": "https://github.com/gajus/pindent",
+	"keywords": ["HTML", "indent", "format"],
+	"homepage": "https://github.com/gajus/Dindent",
 	"type": "library",
 	"license": "BSD-3-Clause",
 	"authors": [
@@ -19,7 +19,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Gajus\\Pindent\\": "src/"
+			"Gajus\\Dindent\\": "src/"
 		}
 	}
 }
