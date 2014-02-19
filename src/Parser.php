@@ -51,7 +51,7 @@ class Parser {
             else if (preg_match("/<[^\/](.*)>/", $tag)) {
                 $next_line_indentation_level++;
             } else {
-                throw new \RuntimeExecption('Unknown tag.');
+                throw new \RuntimeException('Unknown tag.');
             }
 
             $response .= str_repeat($this->indent, $indentation_level) . $tag . "\n";
