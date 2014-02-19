@@ -54,6 +54,10 @@ class Parser {
                 throw new \RuntimeException('Unknown tag.');
             }
 
+            if ($indentation_level < 0) {
+                throw new \RuntimeException('Negative indentation.');
+            }
+
             $response .= str_repeat($this->indent, $indentation_level) . $tag . "\n";
         }
 
