@@ -3,12 +3,16 @@
 [![Build Status](https://travis-ci.org/gajus/dindent.png?branch=master)](https://travis-ci.org/gajus/dindent)
 [![Coverage Status](https://coveralls.io/repos/gajus/dindent/badge.png)](https://coveralls.io/r/gajus/dindent)
 
-* Indentation for development and testing.
+* HTML indentation for development and testing.
 * Do not use in production.
 
-Dedicated to developers who suffer from OCD and cannot bare reading template engine produced code.
+Dedicated to developers who suffer from OCD and cannot bare reading template engine produced output.
 
-This code is not for validating document or sanitisation. Consider using [DOMDocument::$formatOutput](http://www.php.net/manual/en/class.domdocument.php), [HTML Purifier](http://htmlpurifier.org/) or [Tidy](http://www.php.net/manual/en/book.tidy.php).
+If you are looking for documentation validation or sanitisation, consider:
+
+* [DOMDocument::$formatOutput](http://www.php.net/manual/en/class.domdocument.php)
+* [HTML Purifier](http://htmlpurifier.org/)
+* [Tidy](http://www.php.net/manual/en/book.tidy.php)
 
 ## Use
 
