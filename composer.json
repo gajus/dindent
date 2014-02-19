@@ -1,0 +1,26 @@
+{
+	"name": "gajus/marray",
+	"description": "More array functions.",
+	"keywords": ["array", "toolkit"],
+	"homepage": "https://github.com/gajus/marray",
+	"type": "library",
+	"license": "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Gajus Kuizinas",
+			"email": "gk@anuary.com"
+		}
+	],
+	"require": {
+		"php": ">=5.5"
+	},
+	"require-dev": {
+	    "satooshi/php-coveralls": "dev-master"
+	},
+	"autoload": {
+		"psr-4": {
+			"Gajus\\Marray\\": "src/"
+		},
+		"files": ["src/marray.php"]
+	}
+}
