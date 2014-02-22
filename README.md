@@ -8,7 +8,7 @@
 
 Dedicated to developers who suffer from OCD and cannot bare reading template engine produced output.
 
-If you are looking for documentation validation or sanitisation, consider:
+If you were searching for "HTML beautifier", you found it. However, if you are looking for HTML validation or sanitisation, consider:
 
 * [DOMDocument::$formatOutput](http://www.php.net/manual/en/class.domdocument.php)
 * [HTML Purifier](http://htmlpurifier.org/)
