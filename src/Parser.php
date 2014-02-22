@@ -12,10 +12,10 @@ class Parser {
         $temporary_replacements_script = [],
         $temporary_replacements_inline = [];
 
-    const INDENT_NO = 0;
-    const INDENT_DECREASE = 1;
-    const INDENT_INCREASE = 2;
-    const DISCARD = 3;
+    const MATCH_INDENT_NO = 0;
+    const MATCH_INDENT_DECREASE = 1;
+    const MATCH_INDENT_INCREASE = 2;
+    const MATCH_DISCARD = 3;
 
     public function indent ($input) {
         $this->log = [];
@@ -41,21 +41,21 @@ class Parser {
 
             foreach ([
                 // block tag
-                '/^(<([a-z]+)(?:[^>]*)>(?:[^<]*)<\/(?:\2)>)/' => static::INDENT_NO,
+                '/^(<([a-z]+)(?:[^>]*)>(?:[^<]*)<\/(?:\2)>)/' => static::MATCH_INDENT_NO,
                 // self-closing tag
-                '/^<(.+)\/>/' => static::INDENT_DECREASE,
+                '/^<(.+)\/>/' => static::MATCH_INDENT_DECREASE,
                 // closing tag
-                '/^<\/([^>]*)>/' => static::INDENT_DECREASE,
+                '/^<\/([^>]*)>/' => static::MATCH_INDENT_DECREASE,
                 // DOCTYPE
-                '/^<!(.*)>/' => static::INDENT_NO,
+                '/^<!(.*)>/' => static::MATCH_INDENT_NO,
                 // tag with implied closing
-                '/^<(input|link|meta|base|br|img|hr)([^>]*)>/' => static::INDENT_NO,
+                '/^<(input|link|meta|base|br|img|hr)([^>]*)>/' => static::MATCH_INDENT_NO,
                 // opening tag
-                '/^<[^\/]([^>]*)>/' => static::INDENT_INCREASE,
+                '/^<[^\/]([^>]*)>/' => static::MATCH_INDENT_INCREASE,
                 // whitespace
-                '/^(\s+)/' => static::DISCARD,
+                '/^(\s+)/' => static::MATCH_DISCARD,
                 // text node
-                '/([^<]+)/' => static::INDENT_NO
+                '/([^<]+)/' => static::MATCH_INDENT_NO
                 ] as $pattern => $rule) {
                 if ($match = preg_match($pattern, $subject, $matches)) {
                     $this->log[] = [
@@ -67,13 +67,13 @@ class Parser {
 
                     $subject = mb_substr($subject, mb_strlen($matches[0]));
 
-                    if ($rule === static::DISCARD) {
+                    if ($rule === static::MATCH_DISCARD) {
                         break;
                     }
 
-                    if ($rule === static::INDENT_NO) {
+                    if ($rule === static::MATCH_INDENT_NO) {
                         
-                    } else if ($rule === static::INDENT_DECREASE) {
+                    } else if ($rule === static::MATCH_INDENT_DECREASE) {
                         $next_line_indentation_level--;
                         $indentation_level--;
                     } else {
@@ -94,8 +94,6 @@ class Parser {
 
         $interpreted_input = implode('', array_map(function ($e) { return $e['match']; }, $this->log));
 
-        #bump($interpreted_input, $input, $this->log);
-
         if ($interpreted_input !== $input) {
             throw new \RuntimeException('Did not reproduce the exact input.');
         }
@@ -109,50 +107,6 @@ class Parser {
         }
 
         return trim($output);
-
-        /*
-        <p>
-            <input>
-            <input />
-            <input></input>
-        </p>
-        */
-
-        /*foreach ($tags as $tag) {
-            $indentation_level = $next_line_indentation_level;
-
-            // Self-closing, doctype or opening and closing tag on the same line, or non-standard tag.
-            if ($this->match(['/<(.+)\/>/', '/<!(.*)>/', '/^<([a-z]+)(?:[^>]*)>(?:[^<]*)<\/(?:\1)>/'], $tag)) { // , '/<(input|link|meta|base|br|img|hr)(.*)>/'
-      
-            // Closing HTML tag
-            } else if ($this->match(['/<\/(.*)>/'], $tag)) {
-                $next_line_indentation_level--;
-                $indentation_level--;
-            }
-            // If opening tag
-            else if ($this->match(['/<[^\/](.*)>/'], $tag)) {
-                $next_line_indentation_level++;
-            } else {
-                throw new \RuntimeException('Unknown tag.');
-            }
-
-            if ($indentation_level < 0) {
-                #throw new \RuntimeException('Negative indentation.');
-                $indentation_level = 0;
-            }
-
-            $response .= str_repeat($this->indent, $indentation_level) . $tag . "\n";
-        }
-
-        $response = preg_replace_callback('/(<script[^>]*>)(\s+)(<\/script>)/', function ($e) { return array_shift($this->temporary_replacements_script); }, $response);
-
-        foreach ($this->temporary_replacements_inline as $i => $original) {
-            $response = str_replace('ᐃ' . ($i + 1) . 'ᐃ', $original, $response);   
-        }
-
-        $response = preg_replace_callback('/(<(\w+)[^>]*>)\s*(<\/\2>)/', function ($e) { return $e[1] . $e[3]; }, $response);
-
-        return trim($response);*/
     }
 
     /**
