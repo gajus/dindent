@@ -50,10 +50,10 @@ class Parser {
                 '/^<(input|link|meta|base|br|img|hr)([^>]*)>/' => static::MATCH_INDENT_NO,
                 // opening tag
                 '/^<[^\/]([^>]*)>/' => static::MATCH_INDENT_INCREASE,
-                // self-closing tag
-                '/^<(.+)\/>/' => static::MATCH_INDENT_DECREASE,
                 // closing tag
                 '/^<\/([^>]*)>/' => static::MATCH_INDENT_DECREASE,
+                // self-closing tag
+                '/^<(.+)\/>/' => static::MATCH_INDENT_DECREASE,
                 // whitespace
                 '/^(\s+)/' => static::MATCH_DISCARD,
                 // text node
