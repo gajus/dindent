@@ -87,7 +87,7 @@ class Parser {
                     }
 
                     #$output .= str_repeat($this->indent, $indentation_level) . 'A:' . $indentation_level . "\n";
-                    $output .= str_repeat($this->indent, $indentation_level) . $matches[0] . "\n";
+                    $output .= str_repeat($this->indent, $indentation_level) . $matches[0] . "\r\n";
 
                     break;
                 }
