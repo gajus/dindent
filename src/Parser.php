@@ -45,7 +45,7 @@ class Parser {
                 // block tag
                 '/^(<([a-z]+)(?:[^>]*)>(?:[^<]*)<\/(?:\2)>)/' => static::MATCH_INDENT_NO,
                 // DOCTYPE
-                '/^<!(.*)>/' => static::MATCH_INDENT_NO,
+                '/^<!([^>]*)>/' => static::MATCH_INDENT_NO,
                 // tag with implied closing
                 '/^<(input|link|meta|base|br|img|hr)([^>]*)>/' => static::MATCH_INDENT_NO,
                 // opening tag
