@@ -81,7 +81,7 @@ class Parser {
                     }
 
                     if ($indentation_level < 0) {
-                        throw new \RuntimeException('Negative indentation.');
+                        $indentation_level = 0;
                     }
 
                     #$output .= str_repeat($this->indent, $indentation_level) . 'A:' . $indentation_level . "\n";
