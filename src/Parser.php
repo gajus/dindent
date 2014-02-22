@@ -20,15 +20,17 @@ class Parser {
     public function indent ($input) {
         $this->log = [];
 
-        // Remove scrip content body, but keep the tag.
+        // Dindent does not indent <script> body. Instead, it temporary removes it from the code, indents the input, and restores the script body.
         $input = preg_replace_callback('/<script\b[^>]*>([\s\S]*?)<\/script>/mi', function ($e) { $this->temporary_replacements_script[] = $e[0]; return '<script></script>'; }, $input);
         
-        // Remove whitespaces.
+        // Removing double whitespaces to make the source code easier to read.
+        // With exception of <pre>/ CSS white-space changing the default behaviour, double whitespace is meaningless in HTML output.
+        // This reason alone is sufficient not to use Dindent in production.
         $input = str_replace("\t", '', $input);
         $input = preg_replace('/\s{2,}/', ' ', $input);
 
         // Remove inline tags and replace them with text entities.
-        $input = preg_replace_callback('/<(b|i|abbr|em|strong|a|span)[^>]*>([\s\S]*?)<\/\1>/', function ($e) { $this->temporary_replacements_inline[] = $e[0]; return 'ᐃ' . count($this->temporary_replacements_inline) . 'ᐃ'; }, $input);
+        $input = preg_replace_callback('/<(b|i|abbr|em|strong|a|span)[^>]*>(?:[^<]*)<\/\1>/', function ($e) { $this->temporary_replacements_inline[] = $e[0]; return 'ᐃ' . count($this->temporary_replacements_inline) . 'ᐃ'; }, $input);
 
         $subject = $input;
 
