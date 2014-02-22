@@ -44,16 +44,16 @@ class Parser {
             foreach ([
                 // block tag
                 '/^(<([a-z]+)(?:[^>]*)>(?:[^<]*)<\/(?:\2)>)/' => static::MATCH_INDENT_NO,
-                // self-closing tag
-                '/^<(.+)\/>/' => static::MATCH_INDENT_DECREASE,
-                // closing tag
-                '/^<\/([^>]*)>/' => static::MATCH_INDENT_DECREASE,
                 // DOCTYPE
                 '/^<!(.*)>/' => static::MATCH_INDENT_NO,
                 // tag with implied closing
                 '/^<(input|link|meta|base|br|img|hr)([^>]*)>/' => static::MATCH_INDENT_NO,
                 // opening tag
                 '/^<[^\/]([^>]*)>/' => static::MATCH_INDENT_INCREASE,
+                // self-closing tag
+                '/^<(.+)\/>/' => static::MATCH_INDENT_DECREASE,
+                // closing tag
+                '/^<\/([^>]*)>/' => static::MATCH_INDENT_DECREASE,
                 // whitespace
                 '/^(\s+)/' => static::MATCH_DISCARD,
                 // text node
