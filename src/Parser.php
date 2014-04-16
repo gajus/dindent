@@ -7,10 +7,10 @@ namespace Gajus\Dindent;
  */
 class Parser {
     private
-        $log = [],
+        $log = array(),
         $indent = '    ',
-        $temporary_replacements_script = [],
-        $temporary_replacements_inline = [];
+        $temporary_replacements_script = array(),
+        $temporary_replacements_inline = array();
 
     const MATCH_INDENT_NO = 0;
     const MATCH_INDENT_DECREASE = 1;
@@ -18,11 +18,16 @@ class Parser {
     const MATCH_DISCARD = 3;
 
     public function indent ($input) {
-        $this->log = [];
+        $this->log = array();
 
         // Dindent does not indent <script> body. Instead, it temporary removes it from the code, indents the input, and restores the script body.
-        $input = preg_replace_callback('/<script\b[^>]*>([\s\S]*?)<\/script>/mi', function ($e) { $this->temporary_replacements_script[] = $e[0]; return '<script></script>'; }, $input);
-        
+        if (preg_match_all('/<script\b[^>]*>([\s\S]*?)<\/script>/mi', $input, $matches)) {
+            $this->temporary_replacements_script = $matches[0];
+            foreach ($matches[0] as $i => $match) {
+                $input = str_replace($match, '<script>' . ($i + 1) . '</script>', $input);
+            }
+        }
+
         // Removing double whitespaces to make the source code easier to read.
         // With exception of <pre>/ CSS white-space changing the default behaviour, double whitespace is meaningless in HTML output.
         // This reason alone is sufficient not to use Dindent in production.
@@ -30,7 +35,12 @@ class Parser {
         $input = preg_replace('/\s{2,}/', ' ', $input);
 
         // Remove inline tags and replace them with text entities.
-        $input = preg_replace_callback('/<(b|i|abbr|em|strong|a|span)[^>]*>(?:[^<]*)<\/\1>/', function ($e) { $this->temporary_replacements_inline[] = $e[0]; return 'ᐃ' . count($this->temporary_replacements_inline) . 'ᐃ'; }, $input);
+        if (preg_match_all('/<(b|i|abbr|em|strong|a|span)[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
+            $this->temporary_replacements_inline = $matches[0];
+            foreach ($matches[0] as $i => $match) {
+                $input = str_replace($match, 'ᐃ' . ($i + 1) . 'ᐃ', $input);
+            }
+        }
 
         $subject = $input;
 
@@ -41,7 +51,7 @@ class Parser {
         do {
             $indentation_level = $next_line_indentation_level;
 
-            foreach ([
+            $patterns = array(
                 // block tag
                 '/^(<([a-z]+)(?:[^>]*)>(?:[^<]*)<\/(?:\2)>)/' => static::MATCH_INDENT_NO,
                 // DOCTYPE
@@ -58,14 +68,17 @@ class Parser {
                 '/^(\s+)/' => static::MATCH_DISCARD,
                 // text node
                 '/([^<]+)/' => static::MATCH_INDENT_NO
-                ] as $pattern => $rule) {
+            );
+            $rules = array('NO', 'DECREASE', 'INCREASE', 'DISCARD');
+
+            foreach ($patterns as $pattern => $rule) {
                 if ($match = preg_match($pattern, $subject, $matches)) {
-                    $this->log[] = [
-                        'rule' => ['NO', 'DECREASE', 'INCREASE', 'DISCARD'][$rule],
+                    $this->log[] = array(
+                        'rule' => $rules[$rule],
                         'pattern' => $pattern,
                         'subject' => $subject,
                         'match' => $matches[0]
-                    ];
+                    );
 
                     $subject = mb_substr($subject, mb_strlen($matches[0]));
 
@@ -74,7 +87,7 @@ class Parser {
                     }
 
                     if ($rule === static::MATCH_INDENT_NO) {
-                        
+
                     } else if ($rule === static::MATCH_INDENT_DECREASE) {
                         $next_line_indentation_level--;
                         $indentation_level--;
@@ -94,18 +107,23 @@ class Parser {
             }
         } while ($match);
 
-        $interpreted_input = implode('', array_map(function ($e) { return $e['match']; }, $this->log));
+        $interpreted_input = '';
+        foreach ($this->log as $e) {
+            $interpreted_input .= $e['match'];
+        }
 
         if ($interpreted_input !== $input) {
             throw new \RuntimeException('Did not reproduce the exact input.');
         }
 
-        $output = preg_replace_callback('/(<(\w+)[^>]*>)\s*(<\/\2>)/', function ($e) { return $e[1] . $e[3]; }, $output);
+        $output = preg_replace('/(<(\w+)[^>]*>)\s*(<\/\2>)/', '\\1\\3', $output);
 
-        $output = preg_replace_callback('/<script><\/script>/', function ($e) { return array_shift($this->temporary_replacements_script); }, $output);
+        foreach ($this->temporary_replacements_script as $i => $original) {
+            $output = str_replace('<script>' . ($i + 1) . '</script>', $original, $output);
+        }
 
         foreach ($this->temporary_replacements_inline as $i => $original) {
-            $output = str_replace('ᐃ' . ($i + 1) . 'ᐃ', $original, $output);   
+            $output = str_replace('ᐃ' . ($i + 1) . 'ᐃ', $original, $output);
         }
 
         return trim($output);
