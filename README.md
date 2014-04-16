@@ -109,3 +109,15 @@ Dindent will convert it to:
 ## Known issues
 
 * Does not treat comments nicely and IE conditional blocks.
+
+## Installation
+
+The recommended way to use Dindent is through [Composer](https://getcomposer.org/).
+
+```json
+{
+    "require": {
+        "gajus/dindent": "1.0.*"
+    }
+}
+```
