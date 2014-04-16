@@ -11,7 +11,7 @@ before_script:
   - mkdir -p build/logs
 
 script:
-  - bash -c 'vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml'
+  - phpunit --verbose --coverage-clover build/logs/clover.xml
 
 after_success:
-  - bash -c 'php vendor/bin/coveralls -v'
+  - php vendor/bin/coveralls -v
