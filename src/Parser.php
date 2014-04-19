@@ -131,7 +131,7 @@ class Parser {
         }
 
         if ($interpreted_input !== $input) {
-            throw new \RuntimeException('Did not reproduce the exact input.');
+            throw new Exception\RuntimeException('Did not reproduce the exact input.');
         }
 
         $output = preg_replace('/(<(\w+)[^>]*>)\s*(<\/\2>)/', '\\1\\3', $output);
