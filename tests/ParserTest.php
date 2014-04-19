@@ -9,7 +9,7 @@ class ParserTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testIndentCustomCharacter () {
-        $parser = new \Gajus\Dindent\Parser(['indent_character' => 'X']);
+        $parser = new \Gajus\Dindent\Parser(['indentation_character' => 'X']);
 
         $indented = $parser->indent('<p><p></p></p>');
 

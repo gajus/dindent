@@ -106,6 +106,14 @@ Dindent will convert it to:
 </html>
 ```
 
+## Options
+
+`Parser` constructor accepts the following options that control indentation:
+
+|Name|Description|
+|---|---|
+|`indentation_character`|Character(s) used for indentation. Default: '    ' (4 whitespace characters).|
+
 ## Known issues
 
 * Does not treat comments nicely and IE conditional blocks.

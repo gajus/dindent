@@ -9,7 +9,7 @@ class Parser {
     private
         $log = array(),
         $options = array(
-            'indent_character' => '    '
+            'indentation_character' => '    '
         ),
         $temporary_replacements_script = array(),
         $temporary_replacements_inline = array();
@@ -111,7 +111,7 @@ class Parser {
                         $indentation_level = 0;
                     }
 
-                    $output .= str_repeat($this->options['indent_character'], $indentation_level) . $matches[0] . "\n";
+                    $output .= str_repeat($this->options['indentation_character'], $indentation_level) . $matches[0] . "\n";
 
                     break;
                 }
