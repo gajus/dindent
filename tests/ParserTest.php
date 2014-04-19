@@ -1,17 +1,33 @@
 <?php
 class ParserTest extends PHPUnit_Framework_TestCase {
-    private
-        $parser;
+    /**
+     * @expectedException Gajus\Dindent\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Unrecognised option.
+     */
+    public function testInvalidOption () {
+        new \Gajus\Dindent\Parser(['foo' => 'bar']);
+    }
 
-    public function setUp () {
-        $this->parser = new \Gajus\Dindent\Parser();
+    public function testIndentCustomCharacter () {
+        $parser = new \Gajus\Dindent\Parser(['indent_character' => 'X']);
+
+        $indented = $parser->indent('<p><p></p></p>');
+
+        $expected_output = '<p>X<p></p></p>';
+
+        $this->assertSame($expected_output, str_replace("\n", '', $indented));
     }
 
     /**
      * @dataProvider indentProvider
      */
     public function testIndent ($name) {
-        $this->assertSame(file_get_contents(__DIR__ . '/output/' . $name . '.html'), $this->parser->indent( file_get_contents(__DIR__ . '/input/' . $name . '.html') ));
+        $parser = new \Gajus\Dindent\Parser();
+
+        $input = file_get_contents(__DIR__ . '/input/' . $name . '.html');
+        $expected_output = file_get_contents(__DIR__ . '/output/' . $name . '.html');
+
+        $this->assertSame($expected_output, $parser->indent($input));
     }
 
     public function indentProvider () {

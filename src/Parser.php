@@ -8,7 +8,9 @@ namespace Gajus\Dindent;
 class Parser {
     private
         $log = array(),
-        $indent = '    ',
+        $options = array(
+            'indent_character' => '    '
+        ),
         $temporary_replacements_script = array(),
         $temporary_replacements_inline = array();
 
@@ -16,6 +18,16 @@ class Parser {
     const MATCH_INDENT_DECREASE = 1;
     const MATCH_INDENT_INCREASE = 2;
     const MATCH_DISCARD = 3;
+
+    public function __construct (array $options = array()) {
+        foreach ($options as $name => $value) {
+            if (!array_key_exists($name, $this->options)) {
+                throw new Exception\InvalidArgumentException('Unrecognised option.');
+            }
+
+            $this->options[$name] = $value;
+        }
+    }
 
     public function indent ($input) {
         $this->log = array();
@@ -99,8 +111,7 @@ class Parser {
                         $indentation_level = 0;
                     }
 
-                    #$output .= str_repeat($this->indent, $indentation_level) . 'A:' . $indentation_level . "\n";
-                    $output .= str_repeat($this->indent, $indentation_level) . $matches[0] . "\n";
+                    $output .= str_repeat($this->options['indent_character'], $indentation_level) . $matches[0] . "\n";
 
                     break;
                 }

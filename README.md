@@ -1,23 +1,23 @@
 # Dindent
 
 [![Build Status](https://travis-ci.org/gajus/dindent.png?branch=master)](https://travis-ci.org/gajus/dindent)
-[![Coverage Status](https://coveralls.io/repos/gajus/dindent/badge.png)](https://coveralls.io/r/gajus/dindent)
+[![Coverage Status](https://coveralls.io/repos/gajus/dindent/badge.png?branch=master)](https://coveralls.io/r/gajus/dindent?branch=master)
 
-HTML indentation for development and testing. Dedicated to developers who suffer from OCD and cannot bare reading template engine produced output. Try it in the [sandbox](http://gajus.com/dindent/sandbox/)!
+Dindent (aka., "HTML beautifier") will indent HTML for development and testing. Dedicate for those who suffer from reading a template engine produced markup. Try it in the [sandbox](http://gajus.com/dindent/sandbox/).
 
-If you were searching for "HTML beautifier", you found it. However, if you are looking for HTML validation or sanitisation, consider:
+If you are looking to remove malicious code or make sure that your document is standards compliant, consider the following alternatives:
 
+* [HTML Purifier](https://github.com/Exercise/HTMLPurifierBundle)
 * [DOMDocument::$formatOutput](http://www.php.net/manual/en/class.domdocument.php)
-* [HTML Purifier](http://htmlpurifier.org/)
 * [Tidy](http://www.php.net/manual/en/book.tidy.php)
 
 ## A word of caution
 
-Do not be bothered about markup indentation in the production environment. Do not use HTML beautifiers-filters to hide the underlying issues with the code. Correct your markup generator. There are valid use cases, e.g. when you allow HTML input (but consider using Markdown instead), though these are rare.
+Do not be bothered about markup indentation in the production environment. Do not use HTML beautifiers-filters to hide the underlying issues with the code. Correct your markup generator. There are valid use cases, e.g. when you allow HTML input from WYSIWYG. However, even then, consider using [Markdown](http://en.wikipedia.org/wiki/Markdown) instead.
 
 If you need to indent your code in the development environment, beware that earlier mentioned libraries will attempt to fix your markup (that's their primary purpose; indentation is a by-product).
 
-Dindent will not attempt to sanitise or otherwise manipulate your output beyond indentation. This library is designed to make your development/debugging easier. Do not use it in production.
+Dindent will not attempt to sanitise or otherwise manipulate your output beyond indentation. This library is designed to make debugging easier. Do not use it in production.
 
 ## Use
 
