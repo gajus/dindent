@@ -19,6 +19,10 @@ If you need to indent your code in the development environment, beware that earl
 
 Dindent will not attempt to sanitise or otherwise manipulate your output beyond indentation. This library is designed to make debugging easier. Do not use it in production.
 
+## Regex
+
+There is a [good reason not to use regular expression to parse HTML](http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454). However, DOM parser will rebuild the whole HTML document. It will attempt to add missing tags, close open block tags, or remove anything that's not a valid HTML. This is what Tidy does, DOM, etc. This behaviour is undesirable when debugging HTML output. Regex based parser will not rebuild the document. Dindent will only add indentation, without otherwise affecting the markup.
+
 ## Use
 
 Parser implements a single method, `indent`:
