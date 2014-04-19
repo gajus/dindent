@@ -25,7 +25,7 @@ Parser implements a single method, `indent`:
 
 ```php
 $parser = new \Gajus\Dindent\Parser();
-$output = $parser->indent('<html>[..]</html>');
+$output = $parser->indent('[..]');
 ```
 
 In the above example, `[..]` is a placeholder for:
