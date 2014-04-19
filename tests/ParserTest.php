@@ -5,17 +5,41 @@ class ParserTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Unrecognised option.
      */
     public function testInvalidOption () {
-        new \Gajus\Dindent\Parser(['foo' => 'bar']);
+        new \Gajus\Dindent\Parser(array('foo' => 'bar'));
     }
 
     public function testIndentCustomCharacter () {
-        $parser = new \Gajus\Dindent\Parser(['indentation_character' => 'X']);
+        $parser = new \Gajus\Dindent\Parser(array('indentation_character' => 'X'));
 
         $indented = $parser->indent('<p><p></p></p>');
 
         $expected_output = '<p>X<p></p></p>';
 
         $this->assertSame($expected_output, str_replace("\n", '', $indented));
+    }
+
+    /**
+     * @dataProvider logProvider
+     */
+    public function testLog ($token, $log) {
+        $parser = new \Gajus\Dindent\Parser();
+        $parser->indent($token);
+        
+        $this->assertSame(array($log), $parser->getLog());
+    }
+
+    public function logProvider () {
+        return array(
+            array(
+                '<p></p>',
+                array(
+                    'rule' => 'NO',
+                    'pattern' => '/^(<([a-z]+)(?:[^>]*)>(?:[^<]*)<\\/(?:\\2)>)/',
+                    'subject' => '<p></p>',
+                    'match' => '<p></p>',
+                )
+            )
+        );
     }
 
     /**
@@ -32,7 +56,7 @@ class ParserTest extends PHPUnit_Framework_TestCase {
 
     public function indentProvider () {
         return array_map(function ($e) {
-            return [pathinfo($e, \PATHINFO_FILENAME)];
+            return array(pathinfo($e, \PATHINFO_FILENAME));
         }, glob(__DIR__ . '/input/*.html'));
     }
 }

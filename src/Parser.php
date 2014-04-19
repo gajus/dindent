@@ -19,6 +19,9 @@ class Parser {
     const MATCH_INDENT_INCREASE = 2;
     const MATCH_DISCARD = 3;
 
+    /**
+     * @param array $options
+     */
     public function __construct (array $options = array()) {
         foreach ($options as $name => $value) {
             if (!array_key_exists($name, $this->options)) {
@@ -29,6 +32,10 @@ class Parser {
         }
     }
 
+    /**
+     * @param string $input HTML input.
+     * @return string Indented HTML.
+     */
     public function indent ($input) {
         $this->log = array();
 
