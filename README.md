@@ -112,7 +112,7 @@ Dindent will convert it to:
 
 |Name|Description|
 |---|---|
-|`indentation_character`|Character(s) used for indentation. Default: '`    `' (4 whitespace characters).|
+|`indentation_character`|Character(s) used for indentation. Defaults to 4 whitespace characters.|
 
 ## Known issues
 
