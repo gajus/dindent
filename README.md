@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/gajus/dindent.png?branch=master)](https://travis-ci.org/gajus/dindent)
 [![Coverage Status](https://coveralls.io/repos/gajus/dindent/badge.png?branch=master)](https://coveralls.io/r/gajus/dindent?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/gajus/dindent/version.png)](https://packagist.org/packages/gajus/dindent)
+[![License](https://poser.pugx.org/gajus/dindent/license.png)](https://packagist.org/packages/gajus/dindent)
 
 Dindent (aka., "HTML beautifier") will indent HTML for development and testing. Dedicated for those who suffer from reading a template engine produced markup. Try it in the [sandbox](http://gajus.com/dindent/sandbox/).
 
