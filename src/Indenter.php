@@ -5,7 +5,7 @@ namespace Gajus\Dindent;
  * @link https://github.com/gajus/dintent for the canonical source repository
  * @license https://github.com/gajus/dintent/blob/master/LICENSE BSD 3-Clause
  */
-class Parser {
+class Indenter {
     private
         $log = array(),
         $options = array(

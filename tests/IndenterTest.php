@@ -1,17 +1,17 @@
 <?php
-class ParserTest extends PHPUnit_Framework_TestCase {
+class IndenterTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException Gajus\Dindent\Exception\InvalidArgumentException
      * @expectedExceptionMessage Unrecognised option.
      */
     public function testInvalidOption () {
-        new \Gajus\Dindent\Parser(array('foo' => 'bar'));
+        new \Gajus\Dindent\Indenter(array('foo' => 'bar'));
     }
 
     public function testIndentCustomCharacter () {
-        $parser = new \Gajus\Dindent\Parser(array('indentation_character' => 'X'));
+        $indenter = new \Gajus\Dindent\Indenter(array('indentation_character' => 'X'));
 
-        $indented = $parser->indent('<p><p></p></p>');
+        $indented = $indenter->indent('<p><p></p></p>');
 
         $expected_output = '<p>X<p></p></p>';
 
@@ -22,10 +22,10 @@ class ParserTest extends PHPUnit_Framework_TestCase {
      * @dataProvider logProvider
      */
     public function testLog ($token, $log) {
-        $parser = new \Gajus\Dindent\Parser();
-        $parser->indent($token);
+        $indenter = new \Gajus\Dindent\Indenter();
+        $indenter->indent($token);
         
-        $this->assertSame(array($log), $parser->getLog());
+        $this->assertSame(array($log), $indenter->getLog());
     }
 
     public function logProvider () {
@@ -46,12 +46,12 @@ class ParserTest extends PHPUnit_Framework_TestCase {
      * @dataProvider indentProvider
      */
     public function testIndent ($name) {
-        $parser = new \Gajus\Dindent\Parser();
+        $indenter = new \Gajus\Dindent\Indenter();
 
         $input = file_get_contents(__DIR__ . '/input/' . $name . '.html');
         $expected_output = file_get_contents(__DIR__ . '/output/' . $name . '.html');
 
-        $this->assertSame($expected_output, $parser->indent($input));
+        $this->assertSame($expected_output, $indenter->indent($input));
     }
 
     public function indentProvider () {
