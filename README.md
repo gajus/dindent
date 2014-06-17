@@ -5,11 +5,13 @@
 [![Latest Stable Version](https://poser.pugx.org/gajus/dindent/version.png)](https://packagist.org/packages/gajus/dindent)
 [![License](https://poser.pugx.org/gajus/dindent/license.png)](https://packagist.org/packages/gajus/dindent)
 
-Dindent (aka., "HTML beautifier") will indent HTML for development and testing. Dedicated for those who suffer from reading a template engine produced markup. Try it in the [sandbox](http://gajus.com/dindent/sandbox/).
+Dindent (aka., "HTML beautifier") will indent HTML for development and testing. Dedicated for those who suffer from reading a template engine produced markup.
 
-## A word of caution
+Try it in the [sandbox](http://gajus.com/dindent/sandbox/).
 
-Do not be bothered about the markup indentation in the production environment. Do not use HTML beautifiers-filters to hide the underlying issues with the code.
+## Abuse Case
+
+Dindent will not sanitise or otherwise manipulate your output beyond indentation.
 
 If you are looking to remove malicious code or make sure that your document is standards compliant, consider the following alternatives:
 
@@ -19,21 +21,19 @@ If you are looking to remove malicious code or make sure that your document is s
 
 If you need to indent your code in the development environment, beware that earlier mentioned libraries will attempt to fix your markup (that's their primary purpose; indentation is a by-product).
 
-Dindent will not attempt to sanitise or otherwise manipulate your output beyond indentation. This library is designed to make debugging easier. Do not use it in production.
-
 ## Regex
 
-There is a [good reason not to use regular expression to parse HTML](http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454). However, DOM parser will rebuild the whole HTML document. It will attempt to add missing tags, close open block tags, or remove anything that's not a valid HTML. This is what Tidy does, DOM, etc. This behaviour is undesirable when debugging HTML output. Regex based parser will not rebuild the document. Dindent will only add indentation, without otherwise affecting the markup.
+There is a [good reason not to use regular expression to parse HTML](http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454). However, DOM parser will rebuild the whole HTML document. It will add missing tags, close open block tags, or remove anything that's not a valid HTML. This is what Tidy does, DOM, etc. This behavior is undesirable when debugging HTML output. Regex based parser will not rebuild the document. Dindent will only add indentation, without otherwise affecting the markup.
 
 The above is also the reason why [Chrome DevTools](https://developers.google.com/chrome-developer-tools/) is not a direct replacement for Dindent.
 
 ## Use
 
-Parser implements a single method, `indent`:
+`Indenter` implements a single method `indent`:
 
 ```php
-$parser = new \Gajus\Dindent\Parser();
-$output = $parser->indent('[..]');
+$indenter = new \Gajus\Dindent\Indenter();
+$indenter->indent('[..]');
 ```
 
 In the above example, `[..]` is a placeholder for:
@@ -122,6 +122,16 @@ Dindent will convert it to:
 |---|---|
 |`indentation_character`|Character(s) used for indentation. Defaults to 4 whitespace characters.|
 
+# CLI
+
+Dindent can be used via the CLI script `./bin/dindent.php`.
+
+|Name|Description|
+|---|---|
+|`input`|Input file.|
+|`output`|(optional) Output file. Defaults to the STDOUT.|
+|`indentation_character`|(optional) Character(s) used for indentation. Defaults to 4 whitespace characters.|
+
 ## Known issues
 
 * Does not treat comments nicely and IE conditional blocks.
@@ -133,7 +143,7 @@ The recommended way to use Dindent is through [Composer](https://getcomposer.org
 ```json
 {
     "require": {
-        "gajus/dindent": "1.0.*"
+        "gajus/dindent": "2.0.*"
     }
 }
 ```
