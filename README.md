@@ -116,7 +116,7 @@ Dindent will convert it to:
 
 ## Options
 
-`Parser` constructor accepts the following options that control indentation:
+`Indenter` constructor accepts the following options that control indentation:
 
 |Name|Description|
 |---|---|
@@ -126,10 +126,12 @@ Dindent will convert it to:
 
 Dindent can be used via the CLI script `./bin/dindent.php`.
 
+## Options
+
 |Name|Description|
 |---|---|
 |`input`|Input file.|
-|`output`|(optional) Output file. Defaults to the STDOUT.|
+|`output`|(optional) Output file. Defaults to the `STDOUT`.|
 |`indentation_character`|(optional) Character(s) used for indentation. Defaults to 4 whitespace characters.|
 
 ## Known issues
