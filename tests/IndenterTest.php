@@ -2,11 +2,29 @@
 class IndenterTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException Gajus\Dindent\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Unrecognised option.
+     * @expectedExceptionMessage Unrecognized option.
      */
-    public function testInvalidOption () {
+    public function testInvalidSetupOption () {
         new \Gajus\Dindent\Indenter(array('foo' => 'bar'));
     }
+
+    /**
+     * @expectedException Gajus\Dindent\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Unrecognized element type.
+     */
+    public function testSetInvalidElementType () {
+        $indenter = new \Gajus\Dindent\Indenter();
+        $indenter->setElementType('foo', 'bar');
+    }
+
+    /*public function testSetElementTypeInline () {
+        $indenter = new \Gajus\Dindent\Indenter();
+        $indenter->setElementType('foo', \Gajus\Dindent\Indenter::ELEMENT_TYPE_BLOCK);
+
+        $output = $indenter->indent('<p><span>X</span></p>');
+
+        die(var_dump( $output ));
+    }*/
 
     public function testIndentCustomCharacter () {
         $indenter = new \Gajus\Dindent\Indenter(array('indentation_character' => 'X'));
@@ -48,8 +66,8 @@ class IndenterTest extends PHPUnit_Framework_TestCase {
     public function testIndent ($name) {
         $indenter = new \Gajus\Dindent\Indenter();
 
-        $input = file_get_contents(__DIR__ . '/input/' . $name . '.html');
-        $expected_output = file_get_contents(__DIR__ . '/output/' . $name . '.html');
+        $input = file_get_contents(__DIR__ . '/sample/input/' . $name . '.html');
+        $expected_output = file_get_contents(__DIR__ . '/sample/output/' . $name . '.html');
 
         $this->assertSame($expected_output, $indenter->indent($input));
     }
@@ -57,6 +75,6 @@ class IndenterTest extends PHPUnit_Framework_TestCase {
     public function indentProvider () {
         return array_map(function ($e) {
             return array(pathinfo($e, \PATHINFO_FILENAME));
-        }, glob(__DIR__ . '/input/*.html'));
+        }, glob(__DIR__ . '/sample/input/*.html'));
     }
 }

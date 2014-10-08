@@ -11,8 +11,12 @@ class Indenter {
         $options = array(
             'indentation_character' => '    '
         ),
+        $inline_elements = array('b', 'big', 'i', 'small', 'tt', 'abbr', 'acronym', 'cite', 'code', 'dfn', 'em', 'kbd', 'strong', 'samp', 'var', 'a', 'bdo', 'br', 'img', 'span', 'sub', 'sup'),
         $temporary_replacements_script = array(),
         $temporary_replacements_inline = array();
+
+    const ELEMENT_TYPE_BLOCK = 0;
+    const ELEMENT_TYPE_INLINE = 1;
 
     const MATCH_INDENT_NO = 0;
     const MATCH_INDENT_DECREASE = 1;
@@ -25,11 +29,28 @@ class Indenter {
     public function __construct (array $options = array()) {
         foreach ($options as $name => $value) {
             if (!array_key_exists($name, $this->options)) {
-                throw new Exception\InvalidArgumentException('Unrecognised option.');
+                throw new Exception\InvalidArgumentException('Unrecognized option.');
             }
 
             $this->options[$name] = $value;
         }
+    }
+
+    /**
+     * @param string $element_name Element name, e.g. "b".
+     * @param ELEMENT_TYPE_BLOCK|ELEMENT_TYPE_INLINE $type
+     * @return null
+     */
+    public function setElementType ($element_name, $type) {
+        if ($type === static::ELEMENT_TYPE_BLOCK) {
+            $this->inline_elements = array_diff($this->inline_elements, array($element_name));
+        } else if ($type === static::ELEMENT_TYPE_INLINE) {
+            $this->inline_elements[] = $element_name;
+        } else {
+            throw new Exception\InvalidArgumentException('Unrecognized element type.');
+        }
+
+        $this->inline_elements = array_unique($this->inline_elements);
     }
 
     /**
@@ -53,8 +74,8 @@ class Indenter {
         $input = str_replace("\t", '', $input);
         $input = preg_replace('/\s{2,}/', ' ', $input);
 
-        // Remove inline tags and replace them with text entities.
-        if (preg_match_all('/<(b|i|abbr|em|strong|a|span)[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
+        // Remove inline elements and replace them with text entities.
+        if (preg_match_all('/<(' . implode('|', $this->inline_elements) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
             $this->temporary_replacements_inline = $matches[0];
             foreach ($matches[0] as $i => $match) {
                 $input = str_replace($match, 'ᐃ' . ($i + 1) . 'ᐃ', $input);
