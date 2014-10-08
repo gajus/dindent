@@ -6,7 +6,7 @@ function error ($error) {
     exit(1);
 }
 
-$options = getopt(null, ['input:', 'indentation_character:', 'inline:', 'block:']);
+$options = getopt(null, array('input:', 'indentation_character:', 'inline:', 'block:'));
 
 if (!isset($_SERVER['argv'][1])) {
     echo '
