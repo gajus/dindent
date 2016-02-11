@@ -93,7 +93,7 @@ class Indenter {
 
             $patterns = array(
                 // block tag
-                '/^(<([a-z]+)(?:[^>]*)>(?:[^<]*)<\/(?:\2)>)/' => static::MATCH_INDENT_NO,
+                '/^(<([a-z|h1-6]+)(?:[^>]*)>(?:[^<]*)<\/(?:\2)>)/' => static::MATCH_INDENT_NO,
                 // DOCTYPE
                 '/^<!([^>]*)>/' => static::MATCH_INDENT_NO,
                 // tag with implied closing
