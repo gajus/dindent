@@ -52,7 +52,7 @@ class IndenterTest extends PHPUnit_Framework_TestCase {
                 '<p></p>',
                 array(
                     'rule' => 'NO',
-                    'pattern' => '/^(<([a-z]+)(?:[^>]*)>(?:[^<]*)<\\/(?:\\2)>)/',
+                    'pattern' => '/^(<([a-z|h1-6]+)(?:[^>]*)>(?:[^<]*)<\/(?:\2)>)/',
                     'subject' => '<p></p>',
                     'match' => '<p></p>',
                 )
