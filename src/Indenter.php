@@ -75,10 +75,12 @@ class Indenter {
         $input = preg_replace('/\s{2,}/', ' ', $input);
 
         // Remove inline elements and replace them with text entities.
-        if (preg_match_all('/<(' . implode('|', $this->inline_elements) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
-            $this->temporary_replacements_inline = $matches[0];
+        $inlineElementsCounter = 0;
+        while (preg_match_all('/<(' . implode('|', $this->inline_elements) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
             foreach ($matches[0] as $i => $match) {
-                $input = str_replace($match, 'ᐃ' . ($i + 1) . 'ᐃ', $input);
+                $this->temporary_replacements_inline[$inlineElementsCounter] = $match;
+                $inlineElementsCounter++;
+                $input = str_replace($match, 'ᐃ' . $inlineElementsCounter . 'ᐃ', $input);
             }
         }
 
@@ -161,8 +163,9 @@ class Indenter {
             $output = str_replace('<script>' . ($i + 1) . '</script>', $original, $output);
         }
 
-        foreach ($this->temporary_replacements_inline as $i => $original) {
-            $output = str_replace('ᐃ' . ($i + 1) . 'ᐃ', $original, $output);
+        for($i = $inlineElementsCounter; $i > 0; $i--)
+        {
+            $output = str_replace('ᐃ' . $i . 'ᐃ', $this->temporary_replacements_inline[$i-1], $output);
         }
 
         return trim($output);
