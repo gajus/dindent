@@ -98,6 +98,8 @@ class Indenter {
                 '/^<!([^>]*)>/' => static::MATCH_INDENT_NO,
                 // tag with implied closing
                 '/^<(input|link|meta|base|br|img|source|hr)([^>]*)>/' => static::MATCH_INDENT_NO,
+                // self closing SVG tags
+                '/^<(animate|stop|path|circle|line|polyline|rect|use)([^>]*)\/>/' => static::MATCH_INDENT_NO,
                 // opening tag
                 '/^<[^\/]([^>]*)>/' => static::MATCH_INDENT_INCREASE,
                 // closing tag
