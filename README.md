@@ -7,8 +7,6 @@
 
 Dindent (aka., "HTML beautifier") will indent HTML for development and testing. Dedicated for those who suffer from reading a template engine produced markup.
 
-Try it in the [sandbox](http://gajus.com/sandbox/dindent/sandbox/).
-
 ## Abuse Case
 
 Dindent will not sanitize or otherwise manipulate your output beyond indentation.
