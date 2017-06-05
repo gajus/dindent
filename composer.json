@@ -1,6 +1,6 @@
 {
 	"name": "gajus/dindent",
-	"version": "2.0.2",
+	"version": "2.3.0",
 	"description": "HTML indentation library for development and testing.",
 	"keywords": ["HTML", "indent", "format"],
 	"homepage": "https://github.com/gajus/dindent",
