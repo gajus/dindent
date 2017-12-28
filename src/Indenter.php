@@ -2,8 +2,8 @@
 namespace Gajus\Dindent;
 
 /**
- * @link https://github.com/gajus/dindent for the canonical source repository
- * @license https://github.com/gajus/dindent/blob/master/LICENSE BSD 3-Clause
+ * @link https://github.com/gajus/dintent for the canonical source repository
+ * @license https://github.com/gajus/dintent/blob/master/LICENSE BSD 3-Clause
  */
 class Indenter {
     private
@@ -67,6 +67,12 @@ class Indenter {
                 $input = str_replace($match, '<script>' . ($i + 1) . '</script>', $input);
             }
         }
+        if (preg_match_all('/<pre\b[^>]*>([\s\S]*?)<\/pre>/mi', $input, $matches)) {
+            $this->temporary_replacements_pre = $matches[0];
+            foreach ($matches[0] as $i => $match) {
+                $input = str_replace($match, '<pre>' . ($i + 1) . '</pre>', $input);
+            }
+        }
 
         // Removing double whitespaces to make the source code easier to read.
         // With exception of <pre>/ CSS white-space changing the default behaviour, double whitespace is meaningless in HTML output.
@@ -97,9 +103,7 @@ class Indenter {
                 // DOCTYPE
                 '/^<!([^>]*)>/' => static::MATCH_INDENT_NO,
                 // tag with implied closing
-                '/^<(input|link|meta|base|br|img|source|hr)([^>]*)>/' => static::MATCH_INDENT_NO,
-                // self closing SVG tags
-                '/^<(animate|stop|path|circle|line|polyline|rect|use)([^>]*)\/>/' => static::MATCH_INDENT_NO,
+                '/^<(input|link|meta|base|br|img|hr)([^>]*)>/' => static::MATCH_INDENT_NO,
                 // opening tag
                 '/^<[^\/]([^>]*)>/' => static::MATCH_INDENT_INCREASE,
                 // closing tag
@@ -161,6 +165,10 @@ class Indenter {
 
         foreach ($this->temporary_replacements_script as $i => $original) {
             $output = str_replace('<script>' . ($i + 1) . '</script>', $original, $output);
+        }
+
+        foreach ($this->temporary_replacements_pre as $i => $original) {
+            $output = str_replace('<pre>' . ($i + 1) . '</pre>', $original, $output);
         }
 
         foreach ($this->temporary_replacements_inline as $i => $original) {
