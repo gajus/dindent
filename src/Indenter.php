@@ -2,8 +2,8 @@
 namespace Gajus\Dindent;
 
 /**
- * @link https://github.com/gajus/dintent for the canonical source repository
- * @license https://github.com/gajus/dintent/blob/master/LICENSE BSD 3-Clause
+ * @link https://github.com/gajus/dindent for the canonical source repository
+ * @license https://github.com/gajus/dindent/blob/master/LICENSE BSD 3-Clause
  */
 class Indenter {
     private
@@ -12,7 +12,9 @@ class Indenter {
             'indentation_character' => '    '
         ),
         $inline_elements = array('b', 'big', 'i', 'small', 'tt', 'abbr', 'acronym', 'cite', 'code', 'dfn', 'em', 'kbd', 'strong', 'samp', 'var', 'a', 'bdo', 'br', 'img', 'span', 'sub', 'sup'),
-        $temporary_replacements_script = array(),
+        $ignore_elements = array('script','pre','textarea'),
+
+        $temporary_replacements_ignore = array(),
         $temporary_replacements_inline = array();
 
     const ELEMENT_TYPE_BLOCK = 0;
@@ -60,17 +62,13 @@ class Indenter {
     public function indent ($input) {
         $this->log = array();
 
-        // Dindent does not indent <script> body. Instead, it temporary removes it from the code, indents the input, and restores the script body.
-        if (preg_match_all('/<script\b[^>]*>([\s\S]*?)<\/script>/mi', $input, $matches)) {
-            $this->temporary_replacements_script = $matches[0];
-            foreach ($matches[0] as $i => $match) {
-                $input = str_replace($match, '<script>' . ($i + 1) . '</script>', $input);
-            }
-        }
-        if (preg_match_all('/<pre\b[^>]*>([\s\S]*?)<\/pre>/mi', $input, $matches)) {
-            $this->temporary_replacements_pre = $matches[0];
-            foreach ($matches[0] as $i => $match) {
-                $input = str_replace($match, '<pre>' . ($i + 1) . '</pre>', $input);
+        // Dindent does not indent. Instead, it temporary removes it from the code, indents the input, and restores the script body.
+        foreach ($this->ignore_elements as $key) {
+            if (preg_match_all('/<'.$key.'\b[^>]*>([\s\S]*?)<\/'.$key.'>/mi', $input, $matches)) {
+                $this->temporary_replacements_ignore[$key] = $matches[0];
+                foreach ($matches[0] as $i => $match) {
+                    $input = str_replace($match, '<'.$key.'>' . ($i + 1) . '</'.$key.'>', $input);
+                }
             }
         }
 
@@ -103,7 +101,9 @@ class Indenter {
                 // DOCTYPE
                 '/^<!([^>]*)>/' => static::MATCH_INDENT_NO,
                 // tag with implied closing
-                '/^<(input|link|meta|base|br|img|hr)([^>]*)>/' => static::MATCH_INDENT_NO,
+                '/^<(input|link|meta|base|br|img|source|hr)([^>]*)>/' => static::MATCH_INDENT_NO,
+                // self closing SVG tags
+                '/^<(animate|stop|path|circle|line|polyline|rect|use)([^>]*)\/>/' => static::MATCH_INDENT_NO,
                 // opening tag
                 '/^<[^\/]([^>]*)>/' => static::MATCH_INDENT_INCREASE,
                 // closing tag
@@ -163,12 +163,12 @@ class Indenter {
 
         $output = preg_replace('/(<(\w+)[^>]*>)\s*(<\/\2>)/', '\\1\\3', $output);
 
-        foreach ($this->temporary_replacements_script as $i => $original) {
-            $output = str_replace('<script>' . ($i + 1) . '</script>', $original, $output);
-        }
-
-        foreach ($this->temporary_replacements_pre as $i => $original) {
-            $output = str_replace('<pre>' . ($i + 1) . '</pre>', $original, $output);
+        foreach ($this->ignore_elements as $key) {
+            if(isset($this->temporary_replacements_ignore[$key])){
+                foreach ($this->temporary_replacements_ignore[$key] as $i => $original) {
+                 $output = str_replace('<'.$key.'>' . ($i + 1) . '</'.$key.'>', $original, $output);
+                }
+            }
         }
 
         foreach ($this->temporary_replacements_inline as $i => $original) {
