@@ -17,7 +17,7 @@
 		"ext-mbstring": "*"
 	},
 	"require-dev": {
-		"php-coveralls/php-coveralls": "^2.1.0",
+		"php-coveralls/php-coveralls": "^1.1.0",
 		"phpunit/phpunit": "4.*"
 	},
 	"autoload": {
