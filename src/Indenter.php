@@ -72,7 +72,7 @@ class Indenter {
         // With exception of <pre>/ CSS white-space changing the default behaviour, double whitespace is meaningless in HTML output.
         // This reason alone is sufficient not to use Dindent in production.
         $input = str_replace("\t", '', $input);
-        $input = preg_replace('/\s{2,}/', ' ', $input);
+        $input = preg_replace('/\s{2,}/u', ' ', $input);
 
         // Remove inline elements and replace them with text entities.
         if (preg_match_all('/<(' . implode('|', $this->inline_elements) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
@@ -157,7 +157,7 @@ class Indenter {
             throw new Exception\RuntimeException('Did not reproduce the exact input.');
         }
 
-        $output = preg_replace('/(<(\w+)[^>]*>)\s*(<\/\2>)/', '\\1\\3', $output);
+        $output = preg_replace('/(<(\w+)[^>]*>)\s*(<\/\2>)/u', '\\1\\3', $output);
 
         foreach ($this->temporary_replacements_script as $i => $original) {
             $output = str_replace('<script>' . ($i + 1) . '</script>', $original, $output);
