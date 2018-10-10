@@ -17,7 +17,7 @@
 		"ext-mbstring": "*"
 	},
 	"require-dev": {
-	    "satooshi/php-coveralls": "dev-master"
+		"php-coveralls/php-coveralls": "^2.1.0"
 	},
 	"autoload": {
 		"psr-4": {
