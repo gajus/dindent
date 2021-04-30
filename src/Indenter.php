@@ -74,13 +74,19 @@ class Indenter {
         $input = str_replace("\t", '', $input);
         $input = preg_replace('/\s{2,}/u', ' ', $input);
 
-        // Remove inline elements and replace them with text entities.
-        if (preg_match_all('/<(' . implode('|', $this->inline_elements) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
-            $this->temporary_replacements_inline = $matches[0];
-            foreach ($matches[0] as $i => $match) {
-                $input = str_replace($match, 'ᐃ' . ($i + 1) . 'ᐃ', $input);
+        // Remove inline elements and replace them with text entities. Do this recursively until there is nothing to
+        // replace. Store each step in an array.
+        $this->temporary_replacements_inline = array();
+        do {
+            $inputBeforeReplacement = $input;
+            if (preg_match_all('/<(' . implode('|', $this->inline_elements) . ')[^>]*>(?:[^<]*)<\/\1>/', $input, $matches)) {
+                array_unshift($this->temporary_replacements_inline, $matches[0]);
+                foreach ($matches[0] as $i => $match) {
+                    $input = str_replace($match, 'ᐃ' . ($i + 1) . 'ᐃ', $input);
+                }
             }
-        }
+        } while ($inputBeforeReplacement !== $input);
+
 
         $subject = $input;
 
@@ -163,8 +169,10 @@ class Indenter {
             $output = str_replace('<script>' . ($i + 1) . '</script>', $original, $output);
         }
 
-        foreach ($this->temporary_replacements_inline as $i => $original) {
-            $output = str_replace('ᐃ' . ($i + 1) . 'ᐃ', $original, $output);
+        foreach ($this->temporary_replacements_inline as $replacement) {
+            foreach ($replacement as $i => $original) {
+                $output = str_replace('ᐃ' . ($i + 1) . 'ᐃ', $original, $output);
+            }
         }
 
         return trim($output);
