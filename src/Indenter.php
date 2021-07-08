@@ -12,7 +12,9 @@ class Indenter {
             'indentation_character' => '    '
         ),
         $inline_elements = array('b', 'big', 'i', 'small', 'tt', 'abbr', 'acronym', 'cite', 'code', 'dfn', 'em', 'kbd', 'strong', 'samp', 'var', 'a', 'bdo', 'br', 'img', 'span', 'sub', 'sup'),
-        $temporary_replacements_script = array(),
+        $ignore_elements = array('script','pre','textarea'),
+
+        $temporary_replacements_ignore = array(),
         $temporary_replacements_inline = array();
 
     const ELEMENT_TYPE_BLOCK = 0;
@@ -60,11 +62,13 @@ class Indenter {
     public function indent ($input) {
         $this->log = array();
 
-        // Dindent does not indent <script> body. Instead, it temporary removes it from the code, indents the input, and restores the script body.
-        if (preg_match_all('/<script\b[^>]*>([\s\S]*?)<\/script>/mi', $input, $matches)) {
-            $this->temporary_replacements_script = $matches[0];
-            foreach ($matches[0] as $i => $match) {
-                $input = str_replace($match, '<script>' . ($i + 1) . '</script>', $input);
+        // Dindent does not indent. Instead, it temporary removes it from the code, indents the input, and restores the script body.
+        foreach ($this->ignore_elements as $key) {
+            if (preg_match_all('/<'.$key.'\b[^>]*>([\s\S]*?)<\/'.$key.'>/mi', $input, $matches)) {
+                $this->temporary_replacements_ignore[$key] = $matches[0];
+                foreach ($matches[0] as $i => $match) {
+                    $input = str_replace($match, '<'.$key.'>' . ($i + 1) . '</'.$key.'>', $input);
+                }
             }
         }
 
@@ -165,8 +169,12 @@ class Indenter {
 
         $output = preg_replace('/(<(\w+)[^>]*>)\s*(<\/\2>)/u', '\\1\\3', $output);
 
-        foreach ($this->temporary_replacements_script as $i => $original) {
-            $output = str_replace('<script>' . ($i + 1) . '</script>', $original, $output);
+        foreach ($this->ignore_elements as $key) {
+            if(isset($this->temporary_replacements_ignore[$key])){
+                foreach ($this->temporary_replacements_ignore[$key] as $i => $original) {
+                 $output = str_replace('<'.$key.'>' . ($i + 1) . '</'.$key.'>', $original, $output);
+                }
+            }
         }
 
         foreach ($this->temporary_replacements_inline as $replacement) {
